@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="adUJs0" name="noisegen" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginFormats="buildAU,buildVST3" pluginCharacteristicsValue="pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="N69wcv" name="noisegen">
     <GROUP id="{A7870035-8951-A945-BB02-E4AA0CC72C08}" name="Source">
       <FILE id="v0ki0H" name="PluginProcessor.cpp" compile="1" resource="0"

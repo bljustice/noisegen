@@ -19,7 +19,7 @@ NoiseGenAudioProcessor::NoiseGenAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts(*this, nullptr, "Parameters", createParameterLayout())
 #endif
 {
 }
@@ -188,4 +188,15 @@ void NoiseGenAudioProcessor::setStateInformation (const void* data, int sizeInBy
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new NoiseGenAudioProcessor();
+}
+
+//==============================================================================
+juce::AudioProcessorValueTreeState::ParameterLayout NoiseGenAudioProcessor::createParameterLayout()
+{
+    return {
+        std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.5f),
+    };
+//    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+//    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.5f));
+//    return { params.begin(), params.end() };
 }
