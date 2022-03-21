@@ -57,6 +57,19 @@ public:
 
 private:
     //==============================================================================
+    juce::Random random;
+    
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+        
+    // gain related variables and pointers
+    float previousGain; // [1]
+    float level = 0.0f;
+    
+    float minDb = juce::Decibels::gainToDecibels(0.0f);
+    float maxDb = juce::Decibels::gainToDecibels(1.0f);
+    float dbAtMidPoint = -6.0f;
+    
+    std::atomic<float>* gainParameter = nullptr;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NoiseGenAudioProcessor)
 };

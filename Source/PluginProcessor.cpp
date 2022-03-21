@@ -22,6 +22,7 @@ NoiseGenAudioProcessor::NoiseGenAudioProcessor()
                        ), apvts(*this, nullptr, "Parameters", createParameterLayout())
 #endif
 {
+    gainParameter = apvts.getRawParameterValue("GAIN");
 }
 
 NoiseGenAudioProcessor::~NoiseGenAudioProcessor()
@@ -143,6 +144,15 @@ void NoiseGenAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    auto currentGain = *gainParameter * 0.1f;
+
+    if (currentGain == previousGain) {
+        buffer.applyGain (currentGain);
+    }
+    else {
+        previousGain = currentGain;
+    }
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -154,7 +164,9 @@ void NoiseGenAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     {
         auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+        for (auto sample=0; sample < buffer.getNumSamples(); ++sample) {
+            channelData[sample] = random.nextFloat() * currentGain;
+        }
     }
 }
 
@@ -196,7 +208,4 @@ juce::AudioProcessorValueTreeState::ParameterLayout NoiseGenAudioProcessor::crea
     return {
         std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.5f),
     };
-//    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-//    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.5f));
-//    return { params.begin(), params.end() };
 }
